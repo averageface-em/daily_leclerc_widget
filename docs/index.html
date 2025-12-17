@@ -8,13 +8,13 @@
       html,
       body {
         margin: 0;
-        height: 100%;
+        height: fit-content;
       }
       .container {
         border-radius: 20px;
-        height: 100%;
-        padding: 30px 40px 20px 40px;
-        background-image: url("/docs/assets/images/grid.svg");
+        height: auto;
+        padding: 30px 40px 40px 40px;
+        background-image: url("assets/images/grid.svg");
       }
       .widget-title {
         padding-bottom: 27px;
@@ -27,7 +27,13 @@
         letter-spacing: 0.3em;
         font-size: 14px;
       }
-      img {
+      .photo {
+        width: 100%;
+        height: 416px;
+        overflow: hidden;
+        border-radius: 14px;
+      }
+      .photo img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -40,7 +46,7 @@
       <div class="widget-title">
         <h2>📷 Daily Lec -</h2>
       </div>
-      <img id="img" alt="Daily image" />
+      <div class="photo"><img id="img" alt="Daily image" /></div>
       <script>
         async function main() {
           const meta = await fetch("./meta.json", { cache: "no-store" }).then(
