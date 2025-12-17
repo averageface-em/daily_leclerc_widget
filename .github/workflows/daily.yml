@@ -21,7 +21,6 @@ jobs:
         env:
           MEGA_EMAIL: ${{ secrets.MEGA_EMAIL }}
           MEGA_PASS: ${{ secrets.MEGA_PASS }}
-          MEGA_2FA: ${{ secrets.MEGA_2FA }}
           MEGA_FOLDER: "/MEGA/charles leclerc library of alexandria"
           MEGA_WHITELIST_DIR: "/MEGA/cl16loa_whitelists"
         run: |
