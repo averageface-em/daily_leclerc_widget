@@ -16,11 +16,7 @@ def mega_login():
     run("mega-logout >/dev/null 2>&1 || true")
     email = os.environ["MEGA_EMAIL"]
     pw = os.environ["MEGA_PASS"]
-    code = os.environ.get("MEGA_2FA","").strip()
-    if code:
-        run(f"mega-login {shlex.quote(email)} {shlex.quote(pw)} --auth-code={shlex.quote(code)}")
-    else:
-        run(f"mega-login {shlex.quote(email)} {shlex.quote(pw)}")
+    run(f"mega-login {shlex.quote(email)} {shlex.quote(pw)}")
 
 def load_whitelist(tmp_path="whitelist.csv") -> set[str]:
     run(f"mega-get {shlex.quote(REMOTE_WL_DIR)}/whitelist.csv {shlex.quote(tmp_path)}")
