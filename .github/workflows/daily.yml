@@ -5,6 +5,9 @@ on:
     - cron: "10 19 * * *" # 05:10 Sydney during AEDT-ish, adjust later
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
