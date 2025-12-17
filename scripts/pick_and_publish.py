@@ -3,8 +3,8 @@ import os, json, csv, random, subprocess, shlex, pathlib, datetime
 FOLDER = os.environ.get("MEGA_FOLDER", "/MEGA/charles leclerc library of alexandria")
 REMOTE_WL_DIR = os.environ.get("MEGA_WHITELIST_DIR", "/MEGA/cl16loa_whitelists")
 
-OUT_IMG = pathlib.Path("widget/current.jpg")
-OUT_META = pathlib.Path("widget/meta.json")
+OUT_IMG = pathlib.Path("docs/current.jpg")
+OUT_META = pathlib.Path("docs/meta.json")
 
 def sh(cmd: str) -> str:
     return subprocess.check_output(["bash","-lc", cmd], text=True).strip()
