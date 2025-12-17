@@ -1,0 +1,37 @@
+name: Daily MEGA image -> widget
+
+on:
+  schedule:
+    - cron: "10 19 * * *" # 05:10 Sydney during AEDT-ish, adjust later
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MEGAcmd
+        run: |
+          wget https://mega.nz/linux/repo/xUbuntu_22.04/amd64/megacmd-xUbuntu_22.04_amd64.deb
+          sudo apt-get update
+          sudo apt-get install -y ./megacmd-xUbuntu_22.04_amd64.deb
+
+      - name: Run picker
+        env:
+          MEGA_EMAIL: ${{ secrets.MEGA_EMAIL }}
+          MEGA_PASS: ${{ secrets.MEGA_PASS }}
+          MEGA_2FA: ${{ secrets.MEGA_2FA }}
+          MEGA_FOLDER: "/MEGA/charles leclerc library of alexandria"
+          MEGA_WHITELIST_DIR: "/MEGA/cl16loa_whitelists"
+        run: |
+          python -V
+          python scripts/pick_and_publish.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "daily-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add widget/current.jpg widget/meta.json
+          git commit -m "Daily image update" || echo "No changes"
+          git push

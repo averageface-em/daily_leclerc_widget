@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Daily image</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: transparent;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="img" alt="Daily image" />
+    <script>
+      async function main() {
+        const meta = await fetch("./meta.json", { cache: "no-store" }).then(
+          (r) => r.json()
+        );
+        const v = encodeURIComponent(meta.updated_at || Date.now());
+        document.getElementById("img").src = "./current.jpg?v=" + v;
+      }
+      main();
+    </script>
+  </body>
+</html>
