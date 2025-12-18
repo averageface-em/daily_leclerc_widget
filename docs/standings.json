@@ -8,7 +8,7 @@
     "points": 398,
     "wins": 0,
     "podiums": 7,
-    "poles": 4
+    "poles": 1
   },
   "leclerc": {
     "kind": "driver",
@@ -18,7 +18,7 @@
     "points": 242,
     "wins": 0,
     "podiums": 7,
-    "poles": 2,
+    "poles": 1,
     "constructor": "Ferrari"
   },
   "hamilton": {
@@ -29,10 +29,10 @@
     "points": 156,
     "wins": 0,
     "podiums": 0,
-    "poles": 2,
+    "poles": 0,
     "constructor": "Ferrari"
   },
-  "fetchedAt": "2025-12-18T07:44:37.375Z",
+  "fetchedAt": "2025-12-18T08:47:37.235Z",
   "source": "jolpica-ergast",
-  "notes": "Podiums = race P1–P3. Poles = qualifying P1. Sprint poles excluded."
+  "notes": "Podiums = race P1–P3. Poles = Grand Prix qualifying P1 (Sprint Shootout excluded)."
 }
