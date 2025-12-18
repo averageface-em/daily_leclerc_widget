@@ -74,6 +74,7 @@ body {
 .panel__body {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .up_next .panel__media {
