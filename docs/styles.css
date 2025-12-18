@@ -132,6 +132,19 @@ body {
   justify-content: center;
 }
 
+.cd {
+  padding: 0 10px;
+  text-align: center;
+}
+
+.cd__num {
+  font-size: 30px;
+}
+
+.cd__label {
+  font-size: 12px;
+}
+
 .daily_lec .panel__content {
   height: 100%;
 }

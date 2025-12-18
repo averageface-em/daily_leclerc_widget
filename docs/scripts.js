@@ -1,3 +1,7 @@
+/* -------------------------
+   Shared helpers
+-------------------------- */
+
 async function getJSON(path) {
   const res = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch ${path}: ${res.status}`);
@@ -9,27 +13,8 @@ function setImg(selector, src) {
   if (el && src) el.src = src;
 }
 
-async function loadDaily() {
-  const meta = await getJSON("./meta.json");
-  const v = encodeURIComponent(meta.updated_at || Date.now());
-  setImg('img[data-img="daily"]', `./current.jpg?v=${v}`);
-}
-
-async function loadUpNext() {
-  // when you have it:
-  // next_race.json could contain something like:
-  // { "track_image": "./assets/tracks/melbourne.png", "updated_at": "..." }
-  try {
-    const next = await getJSON("./next_race.json");
-    const v = encodeURIComponent(
-      next.updated_at || next.fetchedAt || Date.now()
-    );
-    if (next.track_image) {
-      setImg('img[data-img="track"]', `${next.track_image}?v=${v}`);
-    }
-  } catch {
-    // ok if next_race.json doesn't exist yet
-  }
+function pad2(n) {
+  return String(n).padStart(2, "0");
 }
 
 function ordinal(n) {
@@ -38,6 +23,103 @@ function ordinal(n) {
   const v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
+
+/* -------------------------
+   Daily image
+-------------------------- */
+
+async function loadDaily() {
+  const meta = await getJSON("./meta.json");
+  const v = encodeURIComponent(meta.updated_at || Date.now());
+  setImg('img[data-img="daily"]', `./current.jpg?v=${v}`);
+}
+
+/* -------------------------
+   Up Next (race info + countdown)
+-------------------------- */
+
+let countdownTimer = null;
+
+function renderCountdown(el, ms) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+
+  el.innerHTML = `
+    <div class="cd"><div class="cd__num">${pad2(
+      d
+    )}</div><div class="cd__label">DAYS</div></div>
+    <div class="cd"><div class="cd__num">${pad2(
+      h
+    )}</div><div class="cd__label">HRS</div></div>
+    <div class="cd"><div class="cd__num">${pad2(
+      m
+    )}</div><div class="cd__label">MINS</div></div>
+    <div class="cd"><div class="cd__num">${pad2(
+      s
+    )}</div><div class="cd__label">SECS</div></div>
+  `;
+}
+
+async function loadUpNext() {
+  try {
+    const next = await getJSON("./next_race.json");
+
+    // Round number
+    const roundEl = document.getElementById("round-num");
+    if (roundEl && next.round != null) {
+      roundEl.textContent = `ROUND ${pad2(Number(next.round))}`;
+    }
+
+    // Location (eg. Melbourne //)
+    const locEl = document.getElementById("round-location");
+    if (locEl) {
+      const city = next?.location?.locality || "";
+      locEl.textContent = city ? `${city.toUpperCase()} //` : "";
+    }
+
+    // Track image (MEGA URL — already encoded correctly)
+    if (next.track_image) {
+      const u = new URL(next.track_image);
+
+      // IMPORTANT: pass raw value, let URLSearchParams encode once
+      u.searchParams.set("v", next.updated_at || Date.now());
+
+      setImg('img[data-img="track"]', u.toString());
+    }
+
+    // Countdown to FP1 (UTC)
+    const cdEl = document.querySelector(".race-countdown");
+    if (!cdEl || !next.fp1_utc) return;
+
+    const target = new Date(next.fp1_utc).getTime();
+    if (!Number.isFinite(target)) return;
+
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        cdEl.textContent = "FP1 IS ON 🏁";
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        return;
+      }
+      renderCountdown(cdEl, diff);
+    };
+
+    tick();
+    countdownTimer = setInterval(tick, 1000);
+  } catch (e) {
+    console.error("loadUpNext failed:", e);
+  }
+}
+
+/* -------------------------
+   Standings
+-------------------------- */
 
 async function loadStandings() {
   try {
@@ -52,11 +134,15 @@ async function loadStandings() {
     // Header
     if (data?.season) setText("stand-year", `${data.season} season`);
 
-    // Table values
-    setText("drivers_points", data?.leclerc?.points + "pts");
+    // Driver
+    setText("drivers_points", `${data?.leclerc?.points}pts`);
     setText("drivers_place", ordinal(data?.leclerc?.position));
-    setText("constructors_points", data?.ferrari?.points + "pts");
+
+    // Constructor
+    setText("constructors_points", `${data?.ferrari?.points}pts`);
     setText("constructors_place", ordinal(data?.ferrari?.position));
+
+    // Stats
     setText("stand_wins", data?.leclerc?.wins);
     setText("stand_podiums", data?.leclerc?.podiums);
     setText("stand_poles", data?.leclerc?.poles);
@@ -65,11 +151,19 @@ async function loadStandings() {
   }
 }
 
+/* -------------------------
+   Init
+-------------------------- */
+
 async function main() {
   await Promise.allSettled([loadDaily(), loadUpNext(), loadStandings()]);
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
+/* -------------------------
+   Mobile panel pager
+-------------------------- */
 
 (function () {
   const panels = Array.from(document.querySelectorAll(".panel"));
@@ -90,18 +184,13 @@ document.addEventListener("DOMContentLoaded", main);
     if (isMobile()) {
       showPanel(idx);
     } else {
-      // desktop: show all
       panels.forEach((p) => p.classList.add("is-active"));
     }
   }
 
-  // Event delegation so it works even with 3 duplicated pagers
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-pager]");
-    if (!btn) return;
-
-    // only page on mobile
-    if (!isMobile()) return;
+    if (!btn || !isMobile()) return;
 
     const dir = btn.getAttribute("data-pager");
     showPanel(dir === "next" ? idx + 1 : idx - 1);
