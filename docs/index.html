@@ -4,49 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Daily image</title>
-    <style>
-      html,
-      body {
-        margin: 0;
-        height: fit-content;
-      }
-      .container {
-        border-radius: 20px;
-        height: auto;
-        padding: 30px 40px 40px 40px;
-        background-image: url("assets/images/grid.svg");
-      }
-      .widget-title {
-        padding-bottom: 27px;
-      }
-      h2 {
-        margin: 0;
-        color: #000016;
-        font-family: "Helvetica";
-        text-transform: uppercase;
-        letter-spacing: 0.3em;
-        font-size: 14px;
-      }
-      .photo {
-        width: 100%;
-        height: 416px;
-        overflow: hidden;
-        border-radius: 14px;
-      }
-      .photo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="widget-title">
-        <h2>📷 Daily Lec -</h2>
+    <div class="card">
+      <div class="card__tab">
+        <div class="card__header">
+          <span class="dot"></span>
+          <h3>Daily LEC</h3>
+        </div>
       </div>
-      <div class="photo"><img id="img" alt="Daily image" /></div>
+
+      <div class="card__media"> <img id="img" alt="Daily image" /></div>
       <script>
         async function main() {
           const meta = await fetch("./meta.json", { cache: "no-store" }).then(

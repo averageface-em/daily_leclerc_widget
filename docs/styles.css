@@ -1,0 +1,78 @@
+/* optional: faint grid background like your screenshot */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: transparent;
+}
+
+.card {
+  position: relative;
+  width: 340px;
+  padding: 22px 20px 22px 20px;
+  border-radius: 15px 0px 15px 15px;
+  background: #e3e3e3;
+}
+
+.card__tab {
+  position: absolute;
+  right: 0;
+  top: -48px;
+  width: 50%;
+  height: 30px;
+  border-radius: 15px 15px 0px 0px;
+  background: #e3e3e3;
+  z-index: -1;
+  padding: 10px;
+}
+
+.card__tab::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  background: #e3e3e3;
+  transform: skewX(-15deg);
+  transform-origin: top right;
+  border-top-left-radius: 10px;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 8px 10px 14px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #0b0b16;
+}
+
+.card__header h3 {
+  margin: 0;
+  font-family: "Manrope";
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0b0b16;
+}
+
+.card__media {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ddd;
+}
+
+.card__media img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
