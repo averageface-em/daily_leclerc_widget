@@ -1,0 +1,38 @@
+{
+  "season": 2025,
+  "ferrari": {
+    "kind": "constructor",
+    "id": "ferrari",
+    "name": "Ferrari",
+    "position": 4,
+    "points": 398,
+    "wins": 0,
+    "podiums": 7,
+    "poles": 4
+  },
+  "leclerc": {
+    "kind": "driver",
+    "id": "leclerc",
+    "name": "Charles Leclerc",
+    "position": 5,
+    "points": 242,
+    "wins": 0,
+    "podiums": 7,
+    "poles": 2,
+    "constructor": "Ferrari"
+  },
+  "hamilton": {
+    "kind": "driver",
+    "id": "hamilton",
+    "name": "Lewis Hamilton",
+    "position": 6,
+    "points": 156,
+    "wins": 0,
+    "podiums": 0,
+    "poles": 2,
+    "constructor": "Ferrari"
+  },
+  "fetchedAt": "2025-12-18T07:44:37.375Z",
+  "source": "jolpica-ergast",
+  "notes": "Podiums = race P1–P3. Poles = qualifying P1. Sprint poles excluded."
+}
