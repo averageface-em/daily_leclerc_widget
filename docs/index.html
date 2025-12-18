@@ -2,36 +2,57 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Daily image</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily LEC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="card">
-      <div class="card__tab">
-        <div class="card__header">
-          <span class="dot"></span>
-          <h3>Daily LEC</h3>
+    <div class="container">
+      <div class="panel up_next">
+        <div class="panel__tab">
+          <div class="panel__tab__header">
+            <span class="dot"></span>
+            <h3>Up Next</h3>
+          </div>
+        </div>
+        <div class="panel__body"> Up Next Content Here </div>
+      </div>
+
+      <div class="panel daily_lec">
+        <div class="panel__tab">
+          <div class="panel__tab__header">
+            <span class="dot"></span>
+            <h3>Daily LEC</h3>
+          </div>
+        </div>
+        <div class="panel__body">
+          <div class="panel__media">
+            <img id="img" alt="Daily image" />
+          </div>
         </div>
       </div>
 
-      <div class="card__media"> <img id="img" alt="Daily image" /></div>
-      <script>
-        async function main() {
-          const meta = await fetch("./meta.json", { cache: "no-store" }).then(
-            (r) => r.json()
-          );
-          const v = encodeURIComponent(meta.updated_at || Date.now());
-          document.getElementById("img").src = "./current.jpg?v=" + v;
-        }
-        main();
-      </script>
+      <div class="panel standings">
+        <div class="panel__tab">
+          <div class="panel__tab__header">
+            <span class="dot"></span>
+            <h3>Standings</h3>
+          </div>
+        </div>
+        <div class="panel__body"> Standings Content Here </div>
+      </div>
+
+      <div class="pager">
+        <button id="prev" aria-label="Previous">←</button>
+        <button id="next" aria-label="Next">→</button>
+      </div>
     </div>
+    <script src="scripts.js"></script>
   </body>
 </html>
