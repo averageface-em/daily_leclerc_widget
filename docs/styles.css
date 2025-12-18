@@ -86,7 +86,7 @@ body {
 
 .up_next .panel__media {
   width: 100%;
-  border: solid 1px #000016;
+  border: solid 2px #000016;
   border-radius: 10px;
   overflow: hidden;
   background: #ddd;
@@ -203,24 +203,58 @@ td {
 .separator {
   width: 100%;
   margin: 10px 0 15px 0;
-  border-bottom: 1px solid #000016;
+  border-bottom: 2px solid #000016;
+}
+
+.pager__btn {
+  width: 110px;
+  height: 70px;
+  border-radius: 12px;
+  border: 2px solid #000016;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  transform: skewX(-12deg);
+  margin-top: 40px;
+}
+
+.pager__icon {
+  font-size: 38px;
+  color: #000016;
+  margin-bottom: 5px;
+  transform: skewX(12deg);
+}
+
+.pager__btn:active {
+  transform: skewX(-12deg) scale(0.98);
+}
+.pager__btn:focus-visible {
+  outline: 3px solid rgba(0, 0, 22, 0.25);
+  outline-offset: 3px;
 }
 
 /* mobile mode */
 @media (max-width: 640px) {
   .container {
-    height: 760px;
+    height: 650px;
   }
   .panel {
     display: none;
   }
   .panel.is-active {
     display: block;
+    padding: 35px 30px 35px 30px;
   }
 
   .pager {
     display: flex;
     gap: 14px;
+  }
+
+  .panel.daily_lec {
+    top: 0;
   }
 }
 
