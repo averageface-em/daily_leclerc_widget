@@ -32,9 +32,16 @@ async function loadUpNext() {
   }
 }
 
+function ordinal(n) {
+  if (n == null) return "";
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 async function loadStandings() {
   try {
-    const data = await getJSON("./standings.json"); // lives in /docs
+    const data = await getJSON("./standings.json");
 
     const setText = (id, value) => {
       const el = document.getElementById(id);
@@ -45,9 +52,11 @@ async function loadStandings() {
     // Header
     if (data?.season) setText("stand-year", `${data.season} season`);
 
-    // Table values (match your HTML IDs)
-    setText("stand_drivers", data?.leclerc?.position);
-    setText("stand_constructors", data?.ferrari?.position);
+    // Table values
+    setText("drivers_points", data?.leclerc?.points + "pts");
+    setText("drivers_place", ordinal(data?.leclerc?.position));
+    setText("constructors_points", data?.ferrari?.points + "pts");
+    setText("constructors_place", ordinal(data?.ferrari?.position));
     setText("stand_wins", data?.leclerc?.wins);
     setText("stand_podiums", data?.leclerc?.podiums);
     setText("stand_poles", data?.leclerc?.poles);
