@@ -32,8 +32,32 @@ async function loadUpNext() {
   }
 }
 
+async function loadStandings() {
+  try {
+    const data = await getJSON("./standings.json"); // lives in /docs
+
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && value !== undefined && value !== null)
+        el.textContent = String(value);
+    };
+
+    // Header
+    if (data?.season) setText("stand-year", `${data.season} season`);
+
+    // Table values (match your HTML IDs)
+    setText("stand_drivers", data?.leclerc?.position);
+    setText("stand_constructors", data?.ferrari?.position);
+    setText("stand_wins", data?.leclerc?.wins);
+    setText("stand_podiums", data?.leclerc?.podiums);
+    setText("stand_poles", data?.leclerc?.poles);
+  } catch (e) {
+    console.error("loadStandings failed:", e);
+  }
+}
+
 async function main() {
-  await Promise.allSettled([loadDaily(), loadUpNext()]);
+  await Promise.allSettled([loadDaily(), loadUpNext(), loadStandings()]);
 }
 
 document.addEventListener("DOMContentLoaded", main);
