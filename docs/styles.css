@@ -77,16 +77,20 @@ body {
   height: 100%;
 }
 
+.panel__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
 .up_next .panel__media {
   width: 100%;
-  height: 100%;
   border: solid 1px #000016;
   border-radius: 10px;
   overflow: hidden;
   background: #ddd;
   margin: 20px 0 0 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .up_next .panel__media img {
@@ -115,7 +119,7 @@ body {
   flex: 1; /* take remaining space */
   min-height: 0; /* important in flex layouts */
   display: flex;
-  padding: 10px;
+  padding: 15px;
   margin: 0;
   background: #000016;
   color: #f1f1f1;
@@ -128,7 +132,7 @@ body {
   justify-content: center;
 }
 
-.daily_lec .panel__body {
+.daily_lec .panel__content {
   height: 100%;
 }
 
@@ -177,7 +181,7 @@ table {
 
 th,
 td {
-  padding: 7px 10px;
+  padding: 10px 14px;
   font-family: "Manrope";
   font-weight: 500;
   font-size: 15px;
