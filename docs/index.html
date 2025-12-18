@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://use.typekit.net/aqp5nls.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -21,7 +22,17 @@
             <h3>Up Next</h3>
           </div>
         </div>
-        <div class="panel__body"> Up Next Content Here </div>
+        <div class="panel__body">
+          <div class="separator"></div>
+          <div class="panel__upper_content">
+            <h4 id="round-num">ROUND 01</h4>
+            <p id="round-location">MELBOURNE //</p>
+          </div>
+          <div class="panel__media">
+            <img data-img="track" alt="Track image" />
+            <div class="race-countdown">COUNTDOWN HERE</div>
+          </div>
+        </div>
       </div>
 
       <div class="panel daily_lec">
@@ -33,7 +44,7 @@
         </div>
         <div class="panel__body">
           <div class="panel__media">
-            <img id="img" alt="Daily image" />
+            <img data-img="daily" alt="Daily image" />
           </div>
         </div>
       </div>
@@ -45,7 +56,40 @@
             <h3>Standings</h3>
           </div>
         </div>
-        <div class="panel__body"> Standings Content Here </div>
+        <div class="panel__body"
+          ><div class="separator"></div>
+          <div class="panel__upper_content">
+            <h4 id="stand-year">2025 season</h4>
+            <p id="stand-title">standings //</p>
+          </div>
+          <div class="panel__lower_content">
+            <table id="standings_table">
+              <thead></thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Drivers</th>
+                  <td id="stand_drivers">0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Constructors</th>
+                  <td id="stand_constructors">0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wins</th>
+                  <td id="stand_wins">0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Podiums</th>
+                  <td id="stand_podiums">0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Pole Positions</th>
+                  <td id="stand_poles">0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <div class="pager">
@@ -53,6 +97,6 @@
         <button id="next" aria-label="Next">→</button>
       </div>
     </div>
-    <script src="scripts.js"></script>
+    <script src="scripts.js?v=1"></script>
   </body>
 </html>
