@@ -237,11 +237,15 @@ td {
 
 /* mobile mode */
 @media (max-width: 640px) {
+  body {
+    margin: 0;
+  }
   .container {
     height: 650px;
   }
   .panel {
     display: none;
+    margin: 0 5px;
   }
   .panel.is-active {
     display: block;
