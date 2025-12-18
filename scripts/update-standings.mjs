@@ -8,7 +8,7 @@ async function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function fetchCount(url) {
+async function fetchJson(url) {
   const tries = [{ delay: 0 }, { delay: 400 }, { delay: 1200 }];
   let lastStatus = 0;
 
@@ -18,46 +18,94 @@ async function fetchCount(url) {
     const res = await fetch(url, { headers: { accept: "application/json" } });
     lastStatus = res.status;
 
-    if (res.status === 404) return { ok: true, status: 404, total: 0 };
+    if (res.status === 404) return { ok: true, status: 404, json: null };
 
     if (res.ok) {
       const json = await res.json();
-      const total = Number(json?.MRData?.total ?? "0");
-      return {
-        ok: true,
-        status: res.status,
-        total: Number.isFinite(total) ? total : 0,
-      };
+      return { ok: true, status: res.status, json };
     }
 
+    // Retry only on 429 or 5xx
     if (!(res.status === 429 || res.status >= 500)) break;
   }
 
-  return { ok: false, status: lastStatus || 0, total: 0 };
+  return { ok: false, status: lastStatus || 0, json: null };
 }
 
-async function fetchPolesForDriver(season, driverId) {
-  const res = await fetchCount(
-    `${BASE}/${season}/drivers/${driverId}/qualifying/1.json`
-  );
+async function fetchCount(url) {
+  const out = await fetchJson(url);
+  if (out.status === 404) return { ok: true, status: 404, total: 0 };
+  if (!out.ok) return { ok: false, status: out.status, total: 0 };
 
+  const total = Number(out.json?.MRData?.total ?? "0");
   return {
-    poles: res.total,
-    ok: res.ok,
-    status: res.status,
+    ok: true,
+    status: out.status,
+    total: Number.isFinite(total) ? total : 0,
   };
 }
 
-async function fetchPolesForConstructor(season, constructorId) {
-  const res = await fetchCount(
-    `${BASE}/${season}/constructors/${constructorId}/qualifying/1.json`
+/**
+ * Counts GRAND PRIX poles only:
+ * - Uses /qualifying.json list (not /qualifying/1.json)
+ * - Excludes Sprint Shootout entries by detecting SQ1/SQ2/SQ3 fields
+ */
+function isSprintShootoutQualifyingResult(q) {
+  return (
+    q &&
+    (Object.prototype.hasOwnProperty.call(q, "SQ1") ||
+      Object.prototype.hasOwnProperty.call(q, "SQ2") ||
+      Object.prototype.hasOwnProperty.call(q, "SQ3"))
+  );
+}
+
+async function fetchGpPolesForDriver(season, driverId) {
+  const out = await fetchJson(
+    `${BASE}/${season}/drivers/${driverId}/qualifying.json?limit=1000`
   );
 
-  return {
-    poles: res.total,
-    ok: res.ok,
-    status: res.status,
-  };
+  if (out.status === 404) return { poles: 0, ok: true, status: 404 };
+  if (!out.ok) return { poles: 0, ok: false, status: out.status };
+
+  const races = out.json?.MRData?.RaceTable?.Races ?? [];
+  let poles = 0;
+
+  for (const race of races) {
+    const q = race?.QualifyingResults?.[0];
+    if (!q) continue;
+
+    if (isSprintShootoutQualifyingResult(q)) continue; // exclude sprint shootout
+
+    if (q.position === "1" || q.position === 1) poles += 1;
+  }
+
+  return { poles, ok: true, status: out.status };
+}
+
+async function fetchGpPolesForConstructor(season, constructorId) {
+  const out = await fetchJson(
+    `${BASE}/${season}/constructors/${constructorId}/qualifying.json?limit=1000`
+  );
+
+  if (out.status === 404) return { poles: 0, ok: true, status: 404 };
+  if (!out.ok) return { poles: 0, ok: false, status: out.status };
+
+  const races = out.json?.MRData?.RaceTable?.Races ?? [];
+  let poles = 0;
+
+  for (const race of races) {
+    // For constructors, QualifyingResults can include multiple cars;
+    // If the constructor has pole, one of its entries will be position "1".
+    const results = race?.QualifyingResults ?? [];
+    const p1 = results.find((r) => r.position === "1" || r.position === 1);
+    if (!p1) continue;
+
+    if (isSprintShootoutQualifyingResult(p1)) continue; // exclude sprint shootout
+
+    poles += 1;
+  }
+
+  return { poles, ok: true, status: out.status };
 }
 
 async function fetchPodiumsForDriver(season, driverId) {
@@ -66,6 +114,7 @@ async function fetchPodiumsForDriver(season, driverId) {
     fetchCount(`${BASE}/${season}/drivers/${driverId}/results/2.json`),
     fetchCount(`${BASE}/${season}/drivers/${driverId}/results/3.json`),
   ]);
+
   return {
     podiums: p1.total + p2.total + p3.total,
     ok: p1.ok && p2.ok && p3.ok,
@@ -84,6 +133,7 @@ async function fetchPodiumsForConstructor(season, constructorId) {
       `${BASE}/${season}/constructors/${constructorId}/results/3.json`
     ),
   ]);
+
   return {
     podiums: p1.total + p2.total + p3.total,
     ok: p1.ok && p2.ok && p3.ok,
@@ -124,8 +174,10 @@ async function fetchMiniStandings(season = "2025") {
     constructorStandings.find(
       (x) => x?.Constructor?.constructorId === "ferrari"
     ) || null;
+
   const leclercStanding =
     driverStandings.find((x) => x?.Driver?.driverId === "leclerc") || null;
+
   const hamiltonStanding =
     driverStandings.find((x) => x?.Driver?.driverId === "hamilton") || null;
 
@@ -140,9 +192,9 @@ async function fetchMiniStandings(season = "2025") {
     fetchPodiumsForConstructor(season, "ferrari"),
     fetchPodiumsForDriver(season, "leclerc"),
     fetchPodiumsForDriver(season, "hamilton"),
-    fetchPolesForConstructor(season, "ferrari"),
-    fetchPolesForDriver(season, "leclerc"),
-    fetchPolesForDriver(season, "hamilton"),
+    fetchGpPolesForConstructor(season, "ferrari"),
+    fetchGpPolesForDriver(season, "leclerc"),
+    fetchGpPolesForDriver(season, "hamilton"),
   ]);
 
   const pickConstructor = (x, pod, poles) =>
@@ -182,7 +234,7 @@ async function fetchMiniStandings(season = "2025") {
     fetchedAt: new Date().toISOString(),
     source: "jolpica-ergast",
     notes:
-      "Podiums = race P1–P3. Poles = qualifying P1. Sprint poles excluded.",
+      "Podiums = race P1–P3. Poles = Grand Prix qualifying P1 (Sprint Shootout excluded).",
   };
 }
 
