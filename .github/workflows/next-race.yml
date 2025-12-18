@@ -1,0 +1,32 @@
+name: Next race
+
+on:
+  schedule:
+    # Every Monday at 09:00 UTC
+    - cron: "0 9 * * 1"
+
+  workflow_dispatch:
+
+jobs:
+  update-next-race:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update next race JSON
+        run: node scripts/update-next-race.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add docs/next_race.json
+          git commit -m "chore: update next race" || echo "No changes to commit"
+          git push
