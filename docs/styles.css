@@ -71,6 +71,10 @@ body {
   color: #000016;
 }
 
+.panel.daily_lec {
+  top: 80px;
+}
+
 .daily_lec .panel__media {
   width: 100%;
   height: 100%;
