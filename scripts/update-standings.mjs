@@ -163,6 +163,52 @@ async function fetchMiniStandings(season = "2026") {
   const constructorsJson = await constructorsRes.json();
   const driversJson = await driversRes.json();
 
+  // IF NO SEASON DATA (pre-season)
+  const cLists = constructorsJson?.MRData?.StandingsTable?.StandingsLists ?? [];
+  const dLists = driversJson?.MRData?.StandingsTable?.StandingsLists ?? [];
+
+  if (cLists.length === 0 || dLists.length === 0) {
+    return {
+      season: Number(season),
+      ferrari: {
+        kind: "constructor",
+        id: "ferrari",
+        name: "Ferrari",
+        position: 0,
+        points: 0,
+        wins: 0,
+        podiums: 0,
+        poles: 0,
+      },
+      leclerc: {
+        kind: "driver",
+        id: "leclerc",
+        name: "Charles Leclerc",
+        position: 0,
+        points: 0,
+        wins: 0,
+        podiums: 0,
+        poles: 0,
+        constructor: "Ferrari",
+      },
+      hamilton: {
+        kind: "driver",
+        id: "hamilton",
+        name: "Lewis Hamilton",
+        position: 0,
+        points: 0,
+        wins: 0,
+        podiums: 0,
+        poles: 0,
+        constructor: "Ferrari",
+      },
+      fetchedAt: new Date().toISOString(),
+      source: "jolpica-ergast",
+      notes:
+        "No standings published for this season yet — showing zeros until data is available.",
+    };
+  }
+
   const constructorStandings =
     constructorsJson?.MRData?.StandingsTable?.StandingsLists?.[0]
       ?.ConstructorStandings ?? [];
@@ -238,7 +284,7 @@ async function fetchMiniStandings(season = "2026") {
   };
 }
 
-const season = process.env.SEASON || "2026";
+const season = process.env.SEASON || String(new Date().getFullYear());
 const payload = await fetchMiniStandings(season);
 
 // write into docs so Pages can serve it
