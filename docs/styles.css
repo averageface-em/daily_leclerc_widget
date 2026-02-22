@@ -107,6 +107,12 @@ body {
   text-transform: uppercase;
 }
 
+@media only screen and (max-width: 1180px) and (min-width: 1024px) {
+  #round-num {
+    font-size: 26px;
+  }
+}
+
 #round-location {
   font-family: "Manrope";
   font-weight: 600;
@@ -141,8 +147,20 @@ body {
   font-size: 30px;
 }
 
+@media only screen and (max-width: 1180px) and (min-width: 1024px) {
+  .cd__num {
+    font-size: 26px;
+  }
+}
+
 .cd__label {
   font-size: 12px;
+}
+
+@media only screen and (max-width: 1180px) and (min-width: 1024px) {
+  .cd__label {
+    font-size: 11px;
+  }
 }
 
 .daily_lec .panel__content {

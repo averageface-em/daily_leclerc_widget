@@ -61,7 +61,7 @@ function isSprintShootoutQualifyingResult(q) {
 
 async function fetchGpPolesForDriver(season, driverId) {
   const out = await fetchJson(
-    `${BASE}/${season}/drivers/${driverId}/qualifying.json?limit=1000`
+    `${BASE}/${season}/drivers/${driverId}/qualifying.json?limit=1000`,
   );
 
   if (out.status === 404) return { poles: 0, ok: true, status: 404 };
@@ -84,7 +84,7 @@ async function fetchGpPolesForDriver(season, driverId) {
 
 async function fetchGpPolesForConstructor(season, constructorId) {
   const out = await fetchJson(
-    `${BASE}/${season}/constructors/${constructorId}/qualifying.json?limit=1000`
+    `${BASE}/${season}/constructors/${constructorId}/qualifying.json?limit=1000`,
   );
 
   if (out.status === 404) return { poles: 0, ok: true, status: 404 };
@@ -124,13 +124,13 @@ async function fetchPodiumsForDriver(season, driverId) {
 async function fetchPodiumsForConstructor(season, constructorId) {
   const [p1, p2, p3] = await Promise.all([
     fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/1.json`
+      `${BASE}/${season}/constructors/${constructorId}/results/1.json`,
     ),
     fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/2.json`
+      `${BASE}/${season}/constructors/${constructorId}/results/2.json`,
     ),
     fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/3.json`
+      `${BASE}/${season}/constructors/${constructorId}/results/3.json`,
     ),
   ]);
 
@@ -140,7 +140,7 @@ async function fetchPodiumsForConstructor(season, constructorId) {
   };
 }
 
-async function fetchMiniStandings(season = "2025") {
+async function fetchMiniStandings(season = "2026") {
   const [constructorsRes, driversRes] = await Promise.all([
     fetch(`${BASE}/${season}/constructorStandings.json?limit=1000`, {
       headers: { accept: "application/json" },
@@ -172,7 +172,7 @@ async function fetchMiniStandings(season = "2025") {
 
   const ferrariStanding =
     constructorStandings.find(
-      (x) => x?.Constructor?.constructorId === "ferrari"
+      (x) => x?.Constructor?.constructorId === "ferrari",
     ) || null;
 
   const leclercStanding =
@@ -238,7 +238,7 @@ async function fetchMiniStandings(season = "2025") {
   };
 }
 
-const season = process.env.SEASON || "2025";
+const season = process.env.SEASON || "2026";
 const payload = await fetchMiniStandings(season);
 
 // write into docs so Pages can serve it
@@ -246,7 +246,7 @@ await mkdir("docs", { recursive: true });
 await writeFile(
   path.join("docs", "standings.json"),
   JSON.stringify(payload, null, 2) + "\n",
-  "utf8"
+  "utf8",
 );
 
 console.log("Wrote docs/standings.json");
