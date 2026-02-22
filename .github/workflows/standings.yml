@@ -20,8 +20,6 @@ jobs:
 
       - name: Generate standings.json
         run: node scripts/update-standings.mjs
-        env:
-          SEASON: "2025"
 
       - name: Commit and push if changed
         run: |
