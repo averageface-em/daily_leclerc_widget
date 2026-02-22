@@ -135,15 +135,20 @@ async function loadStandings() {
     if (data?.season) setText("stand-year", `${data.season} season`);
 
     // Driver
-    const points = Number(data?.leclerc?.points ?? 0);
-    const position = Number(data?.leclerc?.position ?? 0);
+    const dPoints = Number(data?.leclerc?.points ?? 0);
+    const dPosition = Number(data?.leclerc?.position ?? 0);
 
-    setText("drivers_points", points > 0 ? `${points}pts` : "");
-    setText("drivers_place", position > 0 ? ordinal(position) : "");
+    setText("drivers_points", dPoints > 0 ? `${dPoints}pts` : "-");
+
+    setText("drivers_place", dPosition > 0 ? ordinal(dPosition) : "-");
 
     // Constructor
-    setText("constructors_points", `${data?.ferrari?.points}pts`);
-    setText("constructors_place", ordinal(data?.ferrari?.position));
+    const cPoints = Number(data?.ferrari?.points ?? 0);
+    const cPosition = Number(data?.ferrari?.position ?? 0);
+
+    setText("constructors_points", cPoints > 0 ? `${cPoints}pts` : "-");
+
+    setText("constructors_place", cPosition > 0 ? ordinal(cPosition) : "-");
 
     // Stats
     setText("stand_wins", data?.leclerc?.wins);
