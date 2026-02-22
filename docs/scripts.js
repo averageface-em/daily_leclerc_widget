@@ -49,16 +49,16 @@ function renderCountdown(el, ms) {
 
   el.innerHTML = `
     <div class="cd"><div class="cd__num">${pad2(
-      d
+      d,
     )}</div><div class="cd__label">DAYS</div></div>
     <div class="cd"><div class="cd__num">${pad2(
-      h
+      h,
     )}</div><div class="cd__label">HRS</div></div>
     <div class="cd"><div class="cd__num">${pad2(
-      m
+      m,
     )}</div><div class="cd__label">MINS</div></div>
     <div class="cd"><div class="cd__num">${pad2(
-      s
+      s,
     )}</div><div class="cd__label">SECS</div></div>
   `;
 }
@@ -135,8 +135,11 @@ async function loadStandings() {
     if (data?.season) setText("stand-year", `${data.season} season`);
 
     // Driver
-    setText("drivers_points", `${data?.leclerc?.points}pts`);
-    setText("drivers_place", ordinal(data?.leclerc?.position));
+    const points = Number(data?.leclerc?.points ?? 0);
+    const position = Number(data?.leclerc?.position ?? 0);
+
+    setText("drivers_points", points > 0 ? `${points}pts` : "");
+    setText("drivers_place", position > 0 ? ordinal(position) : "");
 
     // Constructor
     setText("constructors_points", `${data?.ferrari?.points}pts`);
