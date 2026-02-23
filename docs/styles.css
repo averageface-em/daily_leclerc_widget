@@ -7,8 +7,6 @@ body {
   margin: 0 auto;
   padding-top: 50px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
 }
 
 .panel {
@@ -17,9 +15,61 @@ body {
   box-sizing: border-box;
   border-radius: 15px 0px 15px 15px;
   background: #f0efed;
-  flex: 1 1 0;
-  width: auto;
   margin: 0 15px;
+}
+
+/* Desktop grid layout */
+@media (min-width: 641px) {
+  .container {
+    /* kill the flex layout */
+    display: grid;
+    width: min(1600px, 100%);
+    margin: 0 auto;
+    padding-top: 50px;
+    box-sizing: border-box;
+
+    /* 6-column grid lets us do: 3 panels (2 cols each) + 2 panels (3 cols each) */
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 30px;
+    align-items: start;
+  }
+
+  .panel {
+    /* kill flex sizing + margins that cause squish */
+    flex: none;
+    width: auto;
+    margin: 0;
+  }
+
+  /* First row: 3 equal panels */
+  .panel:nth-child(1),
+  .panel:nth-child(2),
+  .panel:nth-child(3) {
+    grid-column: span 2;
+  }
+
+  /* Second row: 2 panels centered (each takes half the row) */
+  .panel:nth-child(4),
+  .panel:nth-child(5) {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 641px) {
+  :root {
+    --stagger: 80px;
+  }
+
+  .panel.daily_lec {
+    transform: translateY(var(--stagger));
+  }
+
+  /* row 1 panels in your layout */
+  .panel.up_next,
+  .panel.daily_lec,
+  .panel.standings {
+    margin-bottom: calc(var(--stagger) + 50px);
+  }
 }
 
 .panel__tab {
@@ -165,10 +215,6 @@ body {
 
 .daily_lec .panel__content {
   height: 100%;
-}
-
-.panel.daily_lec {
-  top: 80px;
 }
 
 .daily_lec .panel__media {
