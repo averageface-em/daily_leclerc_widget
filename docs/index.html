@@ -15,169 +15,205 @@
   </head>
   <body>
     <div class="container">
-      <div class="panel up_next">
-        <div class="panel__tab">
-          <div class="panel__tab__header">
-            <span class="dot"></span>
-            <h3>Up Next</h3>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="separator"></div>
-          <div class="panel__content">
-            <div class="panel__upper_content">
-              <h4 id="round-num">ROUND 01</h4>
-              <p id="round-location">MELBOURNE //</p>
-            </div>
-            <div class="panel__media">
-              <img data-img="track" alt="Track image" />
-              <div class="race-countdown">COUNTDOWN HERE</div>
-            </div>
-          </div>
-          <div class="pager">
-            <button class="pager__btn" data-pager="prev" aria-label="Previous">
-              <span class="pager__icon">←</span>
-            </button>
-
-            <button class="pager__btn" data-pager="next" aria-label="Next">
-              <span class="pager__icon">→</span>
-            </button>
-          </div>
-        </div>
+      <div class="pager pager--desktop" aria-label="Panel navigation">
+        <button
+          class="pager__btn"
+          data-slider="prev"
+          aria-label="Previous panel"
+        >
+          <span class="pager__icon">←</span>
+        </button>
+        <button class="pager__btn" data-slider="next" aria-label="Next panel">
+          <span class="pager__icon">→</span>
+        </button>
       </div>
 
-      <div class="panel daily_lec">
-        <div class="panel__tab">
-          <div class="panel__tab__header">
-            <span class="dot"></span>
-            <h3>Daily LEC</h3>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="panel__content">
-            <div class="panel__media">
-              <img data-img="daily" alt="Daily image" />
+      <!-- Slider track -->
+      <div class="slider" id="panel-slider">
+        <div class="panel up_next">
+          <div class="panel__tab">
+            <div class="panel__tab__header">
+              <span class="dot"></span>
+              <h3>Up Next</h3>
             </div>
           </div>
-          <div class="pager">
-            <button class="pager__btn" data-pager="prev" aria-label="Previous">
-              <span class="pager__icon">←</span>
-            </button>
-
-            <button class="pager__btn" data-pager="next" aria-label="Next">
-              <span class="pager__icon">→</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel standings">
-        <div class="panel__tab">
-          <div class="panel__tab__header">
-            <span class="dot"></span>
-            <h3>Standings</h3>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="separator"></div>
-          <div class="panel__content">
-            <div class="panel__upper_content">
-              <h4 id="stand-year">2026 season</h4>
-              <p id="stand-title">standings //</p>
+          <div class="panel__body">
+            <div class="separator"></div>
+            <div class="panel__content">
+              <div class="panel__upper_content">
+                <h4 id="round-num">ROUND 01</h4>
+                <p id="round-location">MELBOURNE //</p>
+              </div>
+              <div class="panel__media">
+                <img data-img="track" alt="Track image" />
+                <div class="race-countdown">COUNTDOWN HERE</div>
+              </div>
             </div>
-            <div class="panel__lower_content">
-              <table id="standings_table">
-                <thead></thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">Drivers Championship</th>
-                    <td id="stand_drivers">
-                      <span id="drivers_points">0</span> /
-                      <span id="drivers_place">0</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Constructors Championship</th>
-                    <td id="stand_constructors">
-                      <span id="constructors_points">0</span> /
-                      <span id="constructors_place">0</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Wins</th>
-                    <td id="stand_wins">0</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Podiums</th>
-                    <td id="stand_podiums">0</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Pole Positions</th>
-                    <td id="stand_poles">0</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="pager">
+              <button
+                class="pager__btn"
+                data-pager="prev"
+                aria-label="Previous"
+              >
+                <span class="pager__icon">←</span>
+              </button>
+
+              <button class="pager__btn" data-pager="next" aria-label="Next">
+                <span class="pager__icon">→</span>
+              </button>
             </div>
           </div>
-          <div class="pager">
-            <button class="pager__btn" data-pager="prev" aria-label="Previous">
-              <span class="pager__icon">←</span>
-            </button>
-
-            <button class="pager__btn" data-pager="next" aria-label="Next">
-              <span class="pager__icon">→</span>
-            </button>
-          </div>
         </div>
-      </div>
 
-      <div class="panel latest_ig">
-        <div class="panel__tab">
-          <div class="panel__tab__header">
-            <span class="dot"></span>
-            <h3>The Latest</h3>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="panel__content">
-            <div class="panel__media">
-              <div class="wrap" id="ig-root"></div>
-              <script async src="https://www.instagram.com/embed.js"></script>
+        <div class="panel daily_lec">
+          <div class="panel__tab">
+            <div class="panel__tab__header">
+              <span class="dot"></span>
+              <h3>Daily LEC</h3>
             </div>
           </div>
-          <div class="pager">
-            <button class="pager__btn" data-pager="prev" aria-label="Previous">
-              <span class="pager__icon">←</span>
-            </button>
+          <div class="panel__body">
+            <div class="panel__content">
+              <div class="panel__media">
+                <img data-img="daily" alt="Daily image" />
+              </div>
+            </div>
+            <div class="pager">
+              <button
+                class="pager__btn"
+                data-pager="prev"
+                aria-label="Previous"
+              >
+                <span class="pager__icon">←</span>
+              </button>
 
-            <button class="pager__btn" data-pager="next" aria-label="Next">
-              <span class="pager__icon">→</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel latest_news">
-        <div class="panel__tab">
-          <div class="panel__tab__header">
-            <span class="dot"></span>
-            <h3>SF News</h3>
-          </div>
-        </div>
-        <div class="panel__body">
-          <div class="panel__content">
-            <div class="panel__media">
-              <img data-img="daily" alt="SF News" />
+              <button class="pager__btn" data-pager="next" aria-label="Next">
+                <span class="pager__icon">→</span>
+              </button>
             </div>
           </div>
-          <div class="pager">
-            <button class="pager__btn" data-pager="prev" aria-label="Previous">
-              <span class="pager__icon">←</span>
-            </button>
+        </div>
 
-            <button class="pager__btn" data-pager="next" aria-label="Next">
-              <span class="pager__icon">→</span>
-            </button>
+        <div class="panel standings">
+          <div class="panel__tab">
+            <div class="panel__tab__header">
+              <span class="dot"></span>
+              <h3>Standings</h3>
+            </div>
+          </div>
+          <div class="panel__body">
+            <div class="separator"></div>
+            <div class="panel__content">
+              <div class="panel__upper_content">
+                <h4 id="stand-year">2026 season</h4>
+                <p id="stand-title">standings //</p>
+              </div>
+              <div class="panel__lower_content">
+                <table id="standings_table">
+                  <thead></thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Drivers Championship</th>
+                      <td id="stand_drivers">
+                        <span id="drivers_points">0</span> /
+                        <span id="drivers_place">0</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Constructors Championship</th>
+                      <td id="stand_constructors">
+                        <span id="constructors_points">0</span> /
+                        <span id="constructors_place">0</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Wins</th>
+                      <td id="stand_wins">0</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Podiums</th>
+                      <td id="stand_podiums">0</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Pole Positions</th>
+                      <td id="stand_poles">0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pager">
+              <button
+                class="pager__btn"
+                data-pager="prev"
+                aria-label="Previous"
+              >
+                <span class="pager__icon">←</span>
+              </button>
+
+              <button class="pager__btn" data-pager="next" aria-label="Next">
+                <span class="pager__icon">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel latest_ig">
+          <div class="panel__tab">
+            <div class="panel__tab__header">
+              <span class="dot"></span>
+              <h3>The Latest</h3>
+            </div>
+          </div>
+          <div class="panel__body">
+            <div class="panel__content">
+              <div class="panel__media">
+                <div class="wrap" id="ig-root"></div>
+                <script async src="https://www.instagram.com/embed.js"></script>
+              </div>
+            </div>
+            <div class="pager">
+              <button
+                class="pager__btn"
+                data-pager="prev"
+                aria-label="Previous"
+              >
+                <span class="pager__icon">←</span>
+              </button>
+
+              <button class="pager__btn" data-pager="next" aria-label="Next">
+                <span class="pager__icon">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel latest_news">
+          <div class="panel__tab">
+            <div class="panel__tab__header">
+              <span class="dot"></span>
+              <h3>SF News</h3>
+            </div>
+          </div>
+          <div class="panel__body">
+            <div class="panel__content">
+              <div class="panel__media">
+                <img data-img="daily" alt="SF News" />
+              </div>
+            </div>
+            <div class="pager">
+              <button
+                class="pager__btn"
+                data-pager="prev"
+                aria-label="Previous"
+              >
+                <span class="pager__icon">←</span>
+              </button>
+
+              <button class="pager__btn" data-pager="next" aria-label="Next">
+                <span class="pager__icon">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

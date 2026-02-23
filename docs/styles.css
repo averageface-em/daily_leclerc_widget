@@ -16,43 +16,7 @@ body {
   border-radius: 15px 0px 15px 15px;
   background: #f0efed;
   margin: 0 15px;
-}
-
-/* Desktop grid layout */
-@media (min-width: 641px) {
-  .container {
-    /* kill the flex layout */
-    display: grid;
-    width: min(1600px, 100%);
-    margin: 0 auto;
-    padding-top: 50px;
-    box-sizing: border-box;
-
-    /* 6-column grid lets us do: 3 panels (2 cols each) + 2 panels (3 cols each) */
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 30px;
-    align-items: start;
-  }
-
-  .panel {
-    /* kill flex sizing + margins that cause squish */
-    flex: none;
-    width: auto;
-    margin: 0;
-  }
-
-  /* First row: 3 equal panels */
-  .panel:nth-child(1),
-  .panel:nth-child(2),
-  .panel:nth-child(3) {
-    grid-column: span 2;
-  }
-
-  /* Second row: 2 panels centered (each takes half the row) */
-  .panel:nth-child(4),
-  .panel:nth-child(5) {
-    grid-column: span 3;
-  }
+  height: fit-content;
 }
 
 @media (min-width: 641px) {
@@ -60,7 +24,8 @@ body {
     --stagger: 80px;
   }
 
-  .panel.daily_lec {
+  .panel.daily_lec,
+  .panel.latest_ig {
     transform: translateY(var(--stagger));
   }
 
@@ -125,6 +90,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 400px;
 }
 
 .panel__content {
@@ -132,6 +98,7 @@ body {
   flex-direction: column;
   justify-content: space-evenly;
   height: 100%;
+  min-height: 400px;
 }
 
 .up_next .panel__media {
@@ -349,5 +316,68 @@ td {
 @media (min-width: 641px) {
   .pager {
     display: none;
+  }
+}
+
+/* Desktop: horizontal slider, same-width panels, partial peek */
+@media (min-width: 641px) {
+  .container {
+    width: min(1600px, 100%);
+    margin: 0 auto;
+    padding-top: 50px;
+    box-sizing: border-box;
+
+    /* not grid anymore */
+    display: block;
+  }
+
+  /* show desktop pager, hide per-panel pagers */
+  .pager--desktop {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    margin: 0 0 18px 0;
+  }
+  .panel .pager {
+    display: none;
+  }
+
+  .slider {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+
+    scroll-snap-type: x mandatory;
+    padding: 60px 30px 10px 30px; /* breathing room + lets 3rd panel peek */
+  }
+
+  /* hide scrollbar */
+  .slider::-webkit-scrollbar {
+    display: none;
+  }
+  .slider {
+    scrollbar-width: none;
+  }
+
+  .panel {
+    margin: 0;
+    flex: 0 0 420px; /* <-- all panels same width (tweak this) */
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  /* Optional: stagger Daily LEC visually without breaking layout */
+  :root {
+    --stagger: 80px;
+  }
+  .panel.daily_lec {
+    transform: translateY(var(--stagger));
+  }
+
+  /* Reserve space so slider doesn't clip the staggered card */
+  .slider {
+    padding-bottom: calc(10px + var(--stagger));
   }
 }

@@ -170,6 +170,35 @@ async function main() {
 document.addEventListener("DOMContentLoaded", main);
 
 /* -------------------------
+   Desktop pager
+-------------------------- */
+
+(() => {
+  const slider = document.getElementById("panel-slider");
+  if (!slider) return;
+
+  const getStep = () => {
+    const first = slider.querySelector(".panel");
+    if (!first) return 600;
+    const styles = getComputedStyle(slider);
+    const gap = parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return first.getBoundingClientRect().width + gap;
+  };
+
+  document
+    .querySelector("[data-slider='next']")
+    ?.addEventListener("click", () => {
+      slider.scrollBy({ left: getStep(), behavior: "smooth" });
+    });
+
+  document
+    .querySelector("[data-slider='prev']")
+    ?.addEventListener("click", () => {
+      slider.scrollBy({ left: -getStep(), behavior: "smooth" });
+    });
+})();
+
+/* -------------------------
    Mobile panel pager
 -------------------------- */
 
