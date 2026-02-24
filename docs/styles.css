@@ -5,7 +5,7 @@ body {
 .container {
   width: 100%;
   margin: 0 auto;
-  padding-top: 20px;
+  padding-top: 0px;
   box-sizing: border-box;
 }
 
@@ -90,7 +90,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 400px;
+  min-height: 450px;
 }
 
 .panel__content {
@@ -98,7 +98,7 @@ body {
   flex-direction: column;
   justify-content: space-evenly;
   height: 100%;
-  min-height: 400px;
+  min-height: 450px;
 }
 
 .up_next .panel__media {
@@ -197,6 +197,7 @@ body {
   height: 100%;
   display: block;
   object-fit: cover;
+  aspect-ratio: 4 / 5;
 }
 
 #stand-year {
@@ -307,6 +308,10 @@ td {
     gap: 14px;
   }
 
+  .pager--desktop {
+    display: none;
+  }
+
   .panel.daily_lec {
     top: 0;
   }
@@ -325,8 +330,6 @@ td {
     width: min(1600px, 100%);
     margin: 0 auto;
     box-sizing: border-box;
-
-    /* not grid anymore */
     display: block;
   }
 
@@ -360,7 +363,7 @@ td {
     -webkit-overflow-scrolling: touch;
 
     scroll-snap-type: x mandatory;
-    padding: 60px 30px 10px 30px; /* breathing room + lets 3rd panel peek */
+    padding: 60px 30px 10px 30px;
   }
 
   /* hide scrollbar */
