@@ -1,6 +1,14 @@
+/* =========================
+   Base / Document
+   ========================= */
+
 body {
   margin: 10px;
 }
+
+/* =========================
+   Layout
+   ========================= */
 
 .container {
   width: 100%;
@@ -8,6 +16,10 @@ body {
   padding-top: 0px;
   box-sizing: border-box;
 }
+
+/* =========================
+   Panel (shared)
+   ========================= */
 
 .panel {
   position: relative;
@@ -17,24 +29,6 @@ body {
   background: #f0efed;
   margin: 0 15px;
   height: fit-content;
-}
-
-@media (min-width: 641px) {
-  :root {
-    --stagger: 80px;
-  }
-
-  .panel.daily_lec,
-  .panel.latest_ig {
-    transform: translateY(var(--stagger));
-  }
-
-  /* row 1 panels in your layout */
-  .panel.up_next,
-  .panel.daily_lec,
-  .panel.standings {
-    margin-bottom: calc(var(--stagger) + 50px);
-  }
 }
 
 .panel__tab {
@@ -89,17 +83,19 @@ body {
 .panel__body {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 450px;
 }
 
 .panel__content {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 100%;
+  height: auto;
   min-height: 450px;
 }
+
+/* =========================
+   Up Next
+   ========================= */
 
 .up_next .panel__media {
   width: 100%;
@@ -122,12 +118,6 @@ body {
   font-size: 28px;
   margin: 0;
   text-transform: uppercase;
-}
-
-@media only screen and (max-width: 1180px) and (min-width: 999px) {
-  #round-num {
-    font-size: 26px;
-  }
 }
 
 #round-location {
@@ -164,29 +154,18 @@ body {
   font-size: 30px;
 }
 
-@media only screen and (max-width: 1180px) and (min-width: 999px) {
-  .cd__num {
-    font-size: 26px;
-  }
-}
-
 .cd__label {
   font-size: 12px;
 }
 
-@media only screen and (max-width: 1180px) and (min-width: 999px) {
-  .cd__label {
-    font-size: 11px;
-  }
-}
-
-.daily_lec .panel__content {
-  height: 100%;
-}
+/* =========================
+   Daily LEC
+   ========================= */
 
 .daily_lec .panel__media {
   width: 100%;
   height: 100%;
+  min-height: 500px;
   border-radius: 10px;
   overflow: hidden;
   background: #ddd;
@@ -194,11 +173,14 @@ body {
 
 .daily_lec .panel__media img {
   width: 100%;
-  height: 100%;
+  min-height: inherit;
   display: block;
   object-fit: cover;
-  aspect-ratio: 4 / 5;
 }
+
+/* =========================
+   Standings
+   ========================= */
 
 #stand-year {
   font-family: "acumin-pro-wide";
@@ -208,12 +190,6 @@ body {
   margin: 0 0 7px 0;
   text-transform: uppercase;
   line-height: 1.1em;
-}
-
-@media only screen and (max-width: 1180px) and (min-width: 999px) {
-  #stand-year {
-    font-size: 26px;
-  }
 }
 
 #stand-title {
@@ -257,6 +233,60 @@ td {
   border-bottom: 2px solid #000016;
 }
 
+/* =========================
+   The Latest (Instagram)
+   ========================= */
+
+@media (min-width: 641px) {
+  .panel.latest_ig {
+    transform: translateY(var(--stagger));
+  }
+
+  .panel.latest_ig .panel__media {
+    max-height: 500px; /* match your visual baseline */
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    scrollbar-width: thin;
+  }
+
+  /* nice subtle scrollbar */
+  .panel.latest_ig .panel__media::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .panel.latest_ig .panel__media::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .panel.latest_ig .panel__media::after {
+    content: "Scroll for caption ↓";
+    position: sticky;
+    bottom: -1px;
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    font-family: "Manrope";
+    text-transform: uppercase;
+    padding: 12px 0 0;
+    background: linear-gradient(to bottom, transparent, #f0efed 80%);
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+  }
+}
+
+/* =========================
+   SF News (placeholder)
+   ========================= */
+
+/* (intentionally empty right now) */
+
+/* =========================
+   Pager (shared)
+   ========================= */
+
 .pager__btn {
   width: 110px;
   height: 70px;
@@ -281,23 +311,52 @@ td {
 .pager__btn:active {
   transform: skewX(-12deg) scale(0.98);
 }
+
 .pager__btn:focus-visible {
   outline: 3px solid rgba(0, 0, 22, 0.25);
   outline-offset: 3px;
 }
 
-/* mobile mode */
+/* =========================
+   Responsive: Mid-range tweaks
+   ========================= */
+
+@media only screen and (max-width: 1180px) and (min-width: 999px) {
+  #round-num {
+    font-size: 26px;
+  }
+
+  .cd__num {
+    font-size: 26px;
+  }
+
+  .cd__label {
+    font-size: 11px;
+  }
+
+  #stand-year {
+    font-size: 26px;
+  }
+}
+
+/* =========================
+   Responsive: Mobile (keep as-is)
+   ========================= */
+
 @media (max-width: 640px) {
   body {
     margin: 0;
   }
+
   .container {
     height: 650px;
   }
+
   .panel {
     display: none;
     margin: 0 5px;
   }
+
   .panel.is-active {
     display: block;
     padding: 35px 30px 35px 30px;
@@ -317,15 +376,19 @@ td {
   }
 }
 
-/* desktop mode */
+/* =========================
+   Responsive: Desktop
+   ========================= */
+
 @media (min-width: 641px) {
+  :root {
+    --stagger: 80px;
+  }
+
   .pager {
     display: none;
   }
-}
 
-/* Desktop: horizontal slider, same-width panels, partial peek */
-@media (min-width: 641px) {
   .container {
     width: min(1600px, 100%);
     margin: 0 auto;
@@ -364,12 +427,14 @@ td {
 
     scroll-snap-type: x mandatory;
     padding: 60px 30px 10px 30px;
+    padding-bottom: calc(10px + var(--stagger));
   }
 
   /* hide scrollbar */
   .slider::-webkit-scrollbar {
     display: none;
   }
+
   .slider {
     scrollbar-width: none;
   }
@@ -381,16 +446,14 @@ td {
     min-width: 0;
   }
 
-  /* Optional: stagger Daily LEC visually without breaking layout */
-  :root {
-    --stagger: 80px;
-  }
   .panel.daily_lec {
     transform: translateY(var(--stagger));
   }
 
-  /* Reserve space so slider doesn't clip the staggered card */
-  .slider {
-    padding-bottom: calc(10px + var(--stagger));
+  /* row 1 panels in your layout */
+  .panel.up_next,
+  .panel.daily_lec,
+  .panel.standings {
+    margin-bottom: calc(var(--stagger) + 50px);
   }
 }
