@@ -165,7 +165,7 @@ body {
 .daily_lec .panel__media {
   width: 100%;
   height: 100%;
-  min-height: 500px;
+  min-height: inherit;
   border-radius: 10px;
   overflow: hidden;
   background: #ddd;
@@ -351,7 +351,20 @@ td {
    Responsive: Mid-range tweaks
    ========================= */
 
-@media only screen and (max-width: 1180px) and (min-width: 999px) {
+@media only screen and (max-width: 1180px) and (min-width: 950px) {
+  
+  .panel {
+    flex: 0 0 350px !important;
+  }
+
+  .panel__content {
+    min-height: 380px;
+  }
+
+  .panel.latest_ig .panel__media {
+    max-height: 380px;
+  }
+  
   #round-num {
     font-size: 26px;
   }
@@ -475,7 +488,7 @@ td {
 
   .panel {
     margin: 0;
-    flex: 0 0 420px; /* <-- all panels same width (tweak this) */
+    flex: 0 0 420px; 
     scroll-snap-align: start;
     min-width: 0;
   }
