@@ -288,7 +288,7 @@ td {
   font-size: 28px;
   margin: 0 0 7px 0;
   text-transform: uppercase;
-  line-height: 1.1em;
+  line-height: 1.3em;
 }
 
 #sfnews-date {
@@ -301,8 +301,6 @@ td {
 
 .latest_news .panel__media {
   width: 100%;
-  height: 100%;
-  min-height: 500px;
   border-radius: 10px;
   overflow: hidden;
   background: #ddd;
@@ -312,6 +310,7 @@ td {
   width: 100%;
   display: block;
   object-fit: cover;
+  aspect-ratio: 130 / 73;
 }
 
 /* =========================
@@ -370,7 +369,7 @@ td {
   }
 
   #sfnews-title {
-    font-size: 26px;
+    font-size: 22px;
   }
 }
 
