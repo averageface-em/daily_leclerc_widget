@@ -259,6 +259,7 @@ td {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
   }
+}
 
   .panel.latest_ig .panel__media::after {
     content: "Scroll for caption ↓";
@@ -275,7 +276,7 @@ td {
     color: rgba(0, 0, 0, 0.6);
     pointer-events: none;
   }
-}
+
 
 /* =========================
    SF News 
@@ -395,18 +396,45 @@ td {
     margin: 0;
   }
 
-  .container {
-    height: 650px;
-  }
-
   .panel {
     display: none;
-    margin: 0 5px;
+    margin: 50px 5px 0 5px;
   }
 
+  /* Make the container follow the real viewport height (better on iOS) */
+  .container {
+    height: 100svh;
+  }
+
+  /* Fixed “card” height so every panel is identical */
   .panel.is-active {
-    display: block;
+    height: calc(100svh - 230px); /* tweak this number to taste */
     padding: 35px 30px 35px 30px;
+    display: block;
+  }
+
+  /* Let the inner layout fill the fixed height */
+  .panel.is-active .panel__body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content fills remaining space; prevents flex overflow issues */
+  .panel.is-active .panel__content {
+    flex: 1 1 auto;
+    min-height: 0;  /* IMPORTANT: allows inner scrolling */
+  }
+
+  /* Default: no inner scroll for most panels */
+  .panel.is-active .panel__content {
+    overflow: hidden;
+  }
+
+  /* IG panel: allow scrolling inside the panel */
+  .panel.latest_ig.is-active .panel__content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .pager {
@@ -420,6 +448,14 @@ td {
 
   .panel.daily_lec {
     top: 0;
+  }
+
+  .daily_lec .panel__media img {
+    height: inherit;
+  }
+
+  .up_next .panel__media {
+    width: unset;
   }
 }
 
