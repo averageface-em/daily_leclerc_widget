@@ -434,18 +434,18 @@ td {
   .pager--desktop {
     display: flex;
     justify-content: flex-end;
-    gap: 18px;
+    gap: 10px;
     margin: 0 0 18px 0;
   }
 
   .pager--desktop .pager__btn {
     margin-top: 0;
-    width: 90px;
-    height: 60px;
+    width: 75px;
+    height: 52px;
   }
 
   .pager--desktop .pager__icon {
-    font-size: 30px;
+    font-size: 26px;
   }
 
   .panel .pager {
