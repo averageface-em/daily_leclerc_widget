@@ -354,15 +354,15 @@ td {
 @media only screen and (max-width: 1180px) and (min-width: 650px) {
   
   .panel {
-    flex: 0 0 310px !important;
+    flex: 0 0 320px !important;
   }
 
   .panel__content {
-    min-height: 340px;
+    min-height: 360px;
   }
 
   .panel.latest_ig .panel__media {
-    max-height: 340px;
+    max-height: 360px;
   }
   
   #round-num {
