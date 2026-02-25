@@ -299,3 +299,52 @@ async function loadLatest() {
 }
 
 loadLatest();
+
+/* -------------------------
+   SF News
+-------------------------- */
+async function loadSFNews(driver = "leclerc") {
+  const endpoint = `https://sfnews.averageface-em.workers.dev/api/latest?driver=${encodeURIComponent(driver)}`;
+
+  const linkEl = document.getElementById("sfnews-link");
+  const imgEl = document.getElementById("sfnews-img");
+  const titleEl = document.getElementById("sfnews-title");
+  const dateEl = document.getElementById("sfnews-date");
+
+  if (!linkEl || !imgEl || !titleEl || !dateEl) return;
+
+  try {
+    const res = await fetch(endpoint, { cache: "no-store" });
+    if (!res.ok) throw new Error(`SF news fetch failed (${res.status})`);
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    // Populate
+    linkEl.href = data.href || "#";
+    imgEl.src = data.image || "";
+    imgEl.loading = "lazy";
+    imgEl.decoding = "async";
+
+    titleEl.textContent = data.title || "";
+    // Ferrari dates are ISO strings; use a friendly format
+    dateEl.textContent = data.date
+      ? new Date(data.date).toLocaleString(undefined, {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }) + " //"
+      : "";
+  } catch (err) {
+    // Fallback UI (keep it simple; you can style this)
+    titleEl.textContent = "Couldn’t load SF News";
+    dateEl.textContent = "";
+    imgEl.removeAttribute("src");
+    linkEl.removeAttribute("href");
+    console.error(err);
+  }
+}
+
+// call it
+loadSFNews("leclerc");
