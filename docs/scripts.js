@@ -102,7 +102,7 @@ async function loadUpNext() {
     const tick = () => {
       const diff = target - Date.now();
       if (diff <= 0) {
-        cdEl.textContent = "FP1 IS ON 🏁";
+        cdEl.textContent = "WEEKEND UNDERWAY 🏁";
         clearInterval(countdownTimer);
         countdownTimer = null;
         return;
