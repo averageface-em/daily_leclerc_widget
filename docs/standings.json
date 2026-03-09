@@ -4,20 +4,20 @@
     "kind": "constructor",
     "id": "ferrari",
     "name": "Ferrari",
-    "position": 0,
-    "points": 0,
+    "position": 2,
+    "points": 27,
     "wins": 0,
-    "podiums": 0,
+    "podiums": 1,
     "poles": 0
   },
   "leclerc": {
     "kind": "driver",
     "id": "leclerc",
     "name": "Charles Leclerc",
-    "position": 0,
-    "points": 0,
+    "position": 3,
+    "points": 15,
     "wins": 0,
-    "podiums": 0,
+    "podiums": 1,
     "poles": 0,
     "constructor": "Ferrari"
   },
@@ -25,14 +25,14 @@
     "kind": "driver",
     "id": "hamilton",
     "name": "Lewis Hamilton",
-    "position": 0,
-    "points": 0,
+    "position": 4,
+    "points": 12,
     "wins": 0,
     "podiums": 0,
     "poles": 0,
     "constructor": "Ferrari"
   },
-  "fetchedAt": "2026-03-02T08:58:24.830Z",
+  "fetchedAt": "2026-03-09T08:58:45.400Z",
   "source": "jolpica-ergast",
-  "notes": "No standings published for this season yet — showing zeros until data is available."
+  "notes": "Podiums = race P1–P3. Poles = Grand Prix qualifying P1 (Sprint Shootout excluded)."
 }
