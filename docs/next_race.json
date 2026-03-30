@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-03-23T10:02:57.336Z",
+  "updated_at": "2026-03-30T10:16:46.171Z",
   "season": 2026,
-  "round": 3,
-  "race_name": "Japanese Grand Prix",
-  "circuit_id": "suzuka",
+  "round": 4,
+  "race_name": "Miami Grand Prix",
+  "circuit_id": "miami",
   "location": {
-    "locality": "Suzuka",
-    "country": "Japan"
+    "locality": "Miami",
+    "country": "USA"
   },
-  "fp1_utc": "2026-03-27T02:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL3%20-%20Suzuka.png"
+  "fp1_utc": "2026-05-01T16:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL6%20-%20Miami.png"
 }
