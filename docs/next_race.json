@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-06-01T15:19:43.525Z",
+  "updated_at": "2026-06-08T13:06:23.467Z",
   "season": 2026,
-  "round": 6,
-  "race_name": "Monaco Grand Prix",
-  "circuit_id": "monaco",
+  "round": 7,
+  "race_name": "Barcelona Grand Prix",
+  "circuit_id": "catalunya",
   "location": {
-    "locality": "Monte Carlo",
-    "country": "Monaco"
+    "locality": "Barcelona",
+    "country": "Spain"
   },
-  "fp1_utc": "2026-06-05T11:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL8%20-%20Monaco.png"
+  "fp1_utc": "2026-06-12T11:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL9%20-%20Barcelona.png"
 }
