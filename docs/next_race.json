@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-06-08T13:06:23.467Z",
+  "updated_at": "2026-06-15T15:13:54.534Z",
   "season": 2026,
-  "round": 7,
-  "race_name": "Barcelona Grand Prix",
-  "circuit_id": "catalunya",
+  "round": 8,
+  "race_name": "Austrian Grand Prix",
+  "circuit_id": "red_bull_ring",
   "location": {
-    "locality": "Barcelona",
-    "country": "Spain"
+    "locality": "Spielberg",
+    "country": "Austria"
   },
-  "fp1_utc": "2026-06-12T11:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL9%20-%20Barcelona.png"
+  "fp1_utc": "2026-06-26T11:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL11%20-%20Red%20Bull%20Ring.png"
 }
