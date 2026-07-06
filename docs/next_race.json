@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-06-29T13:06:42.085Z",
+  "updated_at": "2026-07-06T12:46:10.399Z",
   "season": 2026,
-  "round": 9,
-  "race_name": "British Grand Prix",
-  "circuit_id": "silverstone",
+  "round": 10,
+  "race_name": "Belgian Grand Prix",
+  "circuit_id": "spa",
   "location": {
-    "locality": "Silverstone",
-    "country": "UK"
+    "locality": "Spa",
+    "country": "Belgium"
   },
-  "fp1_utc": "2026-07-03T11:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL12%20-%20Silverstone.png"
+  "fp1_utc": "2026-07-17T11:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL13%20-%20Spa-Francorchamps.png"
 }
