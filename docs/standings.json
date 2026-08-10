@@ -17,7 +17,7 @@
     "position": 4,
     "points": 138,
     "wins": 1,
-    "podiums": 4,
+    "podiums": 1,
     "poles": 0,
     "constructor": "Ferrari"
   },
@@ -28,11 +28,11 @@
     "position": 2,
     "points": 169,
     "wins": 1,
-    "podiums": 5,
+    "podiums": 3,
     "poles": 0,
     "constructor": "Ferrari"
   },
-  "fetchedAt": "2026-08-03T11:38:46.480Z",
+  "fetchedAt": "2026-08-10T09:43:14.187Z",
   "source": "jolpica-ergast",
   "notes": "Podiums = race P1–P3. Poles = Grand Prix qualifying P1 (Sprint Shootout excluded)."
 }
