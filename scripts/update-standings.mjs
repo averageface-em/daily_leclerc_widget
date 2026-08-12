@@ -1,175 +1,342 @@
 // scripts/update-standings.mjs
+
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
+/* =========================
+   Config
+   ========================= */
+
 const BASE = "https://api.jolpi.ca/ergast/f1";
+const USER_AGENT = "DailyLECWidget/1.0";
+
+/* =========================
+   Shared fetch helpers
+   ========================= */
 
 async function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function fetchJson(url) {
-  const tries = [{ delay: 0 }, { delay: 400 }, { delay: 1200 }];
+  const tries = [
+    { delay: 0 },
+    { delay: 400 },
+    { delay: 1200 },
+  ];
+
   let lastStatus = 0;
 
-  for (const t of tries) {
-    if (t.delay) await sleep(t.delay);
-
-    const res = await fetch(url, { headers: { accept: "application/json" } });
-    lastStatus = res.status;
-
-    if (res.status === 404) return { ok: true, status: 404, json: null };
-
-    if (res.ok) {
-      const json = await res.json();
-      return { ok: true, status: res.status, json };
+  for (const attempt of tries) {
+    if (attempt.delay) {
+      await sleep(attempt.delay);
     }
 
-    // Retry only on 429 or 5xx
-    if (!(res.status === 429 || res.status >= 500)) break;
+    const res = await fetch(url, {
+      headers: {
+        accept: "application/json",
+        "user-agent": USER_AGENT,
+      },
+    });
+
+    lastStatus = res.status;
+
+    // Treat "not found" as an empty result rather than a hard failure.
+    if (res.status === 404) {
+      return {
+        ok: true,
+        status: 404,
+        json: null,
+      };
+    }
+
+    if (res.ok) {
+      return {
+        ok: true,
+        status: res.status,
+        json: await res.json(),
+      };
+    }
+
+    // Retry rate limits and temporary server errors only.
+    if (!(res.status === 429 || res.status >= 500)) {
+      break;
+    }
   }
 
-  return { ok: false, status: lastStatus || 0, json: null };
+  return {
+    ok: false,
+    status: lastStatus || 0,
+    json: null,
+  };
 }
 
-async function fetchCount(url) {
-  const out = await fetchJson(url);
-  if (out.status === 404) return { ok: true, status: 404, total: 0 };
-  if (!out.ok) return { ok: false, status: out.status, total: 0 };
+/* =========================
+   Podiums
+   ========================= */
 
-  const total = Number(out.json?.MRData?.total ?? "0");
+/**
+ * Count Grand Prix podium finishes for one driver.
+ *
+ * We fetch the driver's actual race results for the season and count
+ * results where finishing position is P1, P2 or P3.
+ *
+ * Sprint results are not included because this uses /results/,
+ * not /sprint/.
+ */
+async function fetchPodiumsForDriver(season, driverId) {
+  const out = await fetchJson(
+    `${BASE}/${season}/drivers/${driverId}/results.json?limit=100`,
+  );
+
+  if (out.status === 404) {
+    return {
+      podiums: 0,
+      ok: true,
+      status: 404,
+    };
+  }
+
+  if (!out.ok) {
+    return {
+      podiums: 0,
+      ok: false,
+      status: out.status,
+    };
+  }
+
+  const races = out.json?.MRData?.RaceTable?.Races ?? [];
+
+  let podiums = 0;
+
+  for (const race of races) {
+    const results = race?.Results ?? [];
+
+    for (const result of results) {
+      const position = Number(result?.position);
+
+      if (position >= 1 && position <= 3) {
+        podiums += 1;
+      }
+    }
+  }
+
   return {
+    podiums,
     ok: true,
     status: out.status,
-    total: Number.isFinite(total) ? total : 0,
   };
 }
 
 /**
- * Counts GRAND PRIX poles only:
- * - Uses /qualifying.json list (not /qualifying/1.json)
- * - Excludes Sprint Shootout entries by detecting SQ1/SQ2/SQ3 fields
+ * Count Grand Prix podium finishes for a constructor.
+ *
+ * Each car finishing P1–P3 counts as one constructor podium.
+ * So if both Ferrari drivers finish on the podium in the same GP,
+ * that contributes two podium finishes.
  */
-function isSprintShootoutQualifyingResult(q) {
+async function fetchPodiumsForConstructor(season, constructorId) {
+  const out = await fetchJson(
+    `${BASE}/${season}/constructors/${constructorId}/results.json?limit=100`,
+  );
+
+  if (out.status === 404) {
+    return {
+      podiums: 0,
+      ok: true,
+      status: 404,
+    };
+  }
+
+  if (!out.ok) {
+    return {
+      podiums: 0,
+      ok: false,
+      status: out.status,
+    };
+  }
+
+  const races = out.json?.MRData?.RaceTable?.Races ?? [];
+
+  let podiums = 0;
+
+  for (const race of races) {
+    const results = race?.Results ?? [];
+
+    for (const result of results) {
+      const position = Number(result?.position);
+
+      if (position >= 1 && position <= 3) {
+        podiums += 1;
+      }
+    }
+  }
+
+  return {
+    podiums,
+    ok: true,
+    status: out.status,
+  };
+}
+
+/* =========================
+   Pole Positions
+   ========================= */
+
+/**
+ * Defensive check in case Sprint Shootout-shaped qualifying
+ * records ever appear in the qualifying response.
+ */
+function isSprintShootoutQualifyingResult(result) {
   return (
-    q &&
-    (Object.prototype.hasOwnProperty.call(q, "SQ1") ||
-      Object.prototype.hasOwnProperty.call(q, "SQ2") ||
-      Object.prototype.hasOwnProperty.call(q, "SQ3"))
+    result &&
+    (
+      Object.prototype.hasOwnProperty.call(result, "SQ1") ||
+      Object.prototype.hasOwnProperty.call(result, "SQ2") ||
+      Object.prototype.hasOwnProperty.call(result, "SQ3")
+    )
   );
 }
 
+/**
+ * Count Grand Prix pole positions for one driver.
+ */
 async function fetchGpPolesForDriver(season, driverId) {
   const out = await fetchJson(
-    `${BASE}/${season}/drivers/${driverId}/qualifying.json?limit=1000`,
+    `${BASE}/${season}/drivers/${driverId}/qualifying.json?limit=100`,
   );
 
-  if (out.status === 404) return { poles: 0, ok: true, status: 404 };
-  if (!out.ok) return { poles: 0, ok: false, status: out.status };
+  if (out.status === 404) {
+    return {
+      poles: 0,
+      ok: true,
+      status: 404,
+    };
+  }
+
+  if (!out.ok) {
+    return {
+      poles: 0,
+      ok: false,
+      status: out.status,
+    };
+  }
 
   const races = out.json?.MRData?.RaceTable?.Races ?? [];
+
   let poles = 0;
 
   for (const race of races) {
-    const q = race?.QualifyingResults?.[0];
-    if (!q) continue;
+    const results = race?.QualifyingResults ?? [];
 
-    if (isSprintShootoutQualifyingResult(q)) continue; // exclude sprint shootout
+    for (const result of results) {
+      if (isSprintShootoutQualifyingResult(result)) {
+        continue;
+      }
 
-    if (q.position === "1" || q.position === 1) poles += 1;
+      if (Number(result?.position) === 1) {
+        poles += 1;
+      }
+    }
   }
 
-  return { poles, ok: true, status: out.status };
+  return {
+    poles,
+    ok: true,
+    status: out.status,
+  };
 }
 
+/**
+ * Count Grand Prix pole positions for a constructor.
+ */
 async function fetchGpPolesForConstructor(season, constructorId) {
   const out = await fetchJson(
-    `${BASE}/${season}/constructors/${constructorId}/qualifying.json?limit=1000`,
+    `${BASE}/${season}/constructors/${constructorId}/qualifying.json?limit=100`,
   );
 
-  if (out.status === 404) return { poles: 0, ok: true, status: 404 };
-  if (!out.ok) return { poles: 0, ok: false, status: out.status };
+  if (out.status === 404) {
+    return {
+      poles: 0,
+      ok: true,
+      status: 404,
+    };
+  }
+
+  if (!out.ok) {
+    return {
+      poles: 0,
+      ok: false,
+      status: out.status,
+    };
+  }
 
   const races = out.json?.MRData?.RaceTable?.Races ?? [];
+
   let poles = 0;
 
   for (const race of races) {
-    // For constructors, QualifyingResults can include multiple cars;
-    // If the constructor has pole, one of its entries will be position "1".
     const results = race?.QualifyingResults ?? [];
-    const p1 = results.find((r) => r.position === "1" || r.position === 1);
-    if (!p1) continue;
 
-    if (isSprintShootoutQualifyingResult(p1)) continue; // exclude sprint shootout
+    const poleResult = results.find(
+      (result) =>
+        !isSprintShootoutQualifyingResult(result) &&
+        Number(result?.position) === 1,
+    );
 
-    poles += 1;
+    if (poleResult) {
+      poles += 1;
+    }
   }
 
-  return { poles, ok: true, status: out.status };
-}
-
-async function fetchPodiumsForDriver(season, driverId) {
-  const [p1, p2, p3] = await Promise.all([
-    fetchCount(`${BASE}/${season}/drivers/${driverId}/results/1.json`),
-    fetchCount(`${BASE}/${season}/drivers/${driverId}/results/2.json`),
-    fetchCount(`${BASE}/${season}/drivers/${driverId}/results/3.json`),
-  ]);
-
   return {
-    podiums: p1.total + p2.total + p3.total,
-    ok: p1.ok && p2.ok && p3.ok,
+    poles,
+    ok: true,
+    status: out.status,
   };
 }
 
-async function fetchPodiumsForConstructor(season, constructorId) {
-  const [p1, p2, p3] = await Promise.all([
-    fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/1.json`,
-    ),
-    fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/2.json`,
-    ),
-    fetchCount(
-      `${BASE}/${season}/constructors/${constructorId}/results/3.json`,
-    ),
-  ]);
-
-  return {
-    podiums: p1.total + p2.total + p3.total,
-    ok: p1.ok && p2.ok && p3.ok,
-  };
-}
+/* =========================
+   Standings
+   ========================= */
 
 async function fetchMiniStandings(season = "2026") {
-  const [constructorsRes, driversRes] = await Promise.all([
-    fetch(`${BASE}/${season}/constructorStandings.json?limit=1000`, {
-      headers: { accept: "application/json" },
-    }),
-    fetch(`${BASE}/${season}/driverStandings.json?limit=1000`, {
-      headers: { accept: "application/json" },
-    }),
+  const [constructorsOut, driversOut] = await Promise.all([
+    fetchJson(
+      `${BASE}/${season}/constructorStandings.json?limit=100`,
+    ),
+    fetchJson(
+      `${BASE}/${season}/driverStandings.json?limit=100`,
+    ),
   ]);
 
-  if (!constructorsRes.ok || !driversRes.ok) {
+  if (!constructorsOut.ok || !driversOut.ok) {
     return {
       error: "Upstream fetch failed",
       season: Number(season),
-      constructorStatus: constructorsRes.status,
-      driverStatus: driversRes.status,
+      constructorStatus: constructorsOut.status,
+      driverStatus: driversOut.status,
       fetchedAt: new Date().toISOString(),
     };
   }
 
-  const constructorsJson = await constructorsRes.json();
-  const driversJson = await driversRes.json();
+  const constructorsJson = constructorsOut.json;
+  const driversJson = driversOut.json;
 
-  // IF NO SEASON DATA (pre-season)
-  const cLists = constructorsJson?.MRData?.StandingsTable?.StandingsLists ?? [];
-  const dLists = driversJson?.MRData?.StandingsTable?.StandingsLists ?? [];
+  const constructorLists =
+    constructorsJson?.MRData?.StandingsTable?.StandingsLists ?? [];
 
-  if (cLists.length === 0 || dLists.length === 0) {
+  const driverLists =
+    driversJson?.MRData?.StandingsTable?.StandingsLists ?? [];
+
+  /* -------------------------
+     No season data yet
+     ------------------------- */
+
+  if (constructorLists.length === 0 || driverLists.length === 0) {
     return {
       season: Number(season),
+
       ferrari: {
         kind: "constructor",
         id: "ferrari",
@@ -180,6 +347,7 @@ async function fetchMiniStandings(season = "2026") {
         podiums: 0,
         poles: 0,
       },
+
       leclerc: {
         kind: "driver",
         id: "leclerc",
@@ -191,6 +359,7 @@ async function fetchMiniStandings(season = "2026") {
         poles: 0,
         constructor: "Ferrari",
       },
+
       hamilton: {
         kind: "driver",
         id: "hamilton",
@@ -202,6 +371,7 @@ async function fetchMiniStandings(season = "2026") {
         poles: 0,
         constructor: "Ferrari",
       },
+
       fetchedAt: new Date().toISOString(),
       source: "jolpica-ergast",
       notes:
@@ -209,28 +379,42 @@ async function fetchMiniStandings(season = "2026") {
     };
   }
 
+  /* -------------------------
+     Extract standings
+     ------------------------- */
+
   const constructorStandings =
-    constructorsJson?.MRData?.StandingsTable?.StandingsLists?.[0]
-      ?.ConstructorStandings ?? [];
+    constructorLists[0]?.ConstructorStandings ?? [];
+
   const driverStandings =
-    driversJson?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings ??
-    [];
+    driverLists[0]?.DriverStandings ?? [];
 
   const ferrariStanding =
     constructorStandings.find(
-      (x) => x?.Constructor?.constructorId === "ferrari",
-    ) || null;
+      (entry) =>
+        entry?.Constructor?.constructorId === "ferrari",
+    ) ?? null;
 
   const leclercStanding =
-    driverStandings.find((x) => x?.Driver?.driverId === "leclerc") || null;
+    driverStandings.find(
+      (entry) =>
+        entry?.Driver?.driverId === "leclerc",
+    ) ?? null;
 
   const hamiltonStanding =
-    driverStandings.find((x) => x?.Driver?.driverId === "hamilton") || null;
+    driverStandings.find(
+      (entry) =>
+        entry?.Driver?.driverId === "hamilton",
+    ) ?? null;
+
+  /* -------------------------
+     Derived stats
+     ------------------------- */
 
   const [
-    ferrariPod,
-    leclercPod,
-    hamiltonPod,
+    ferrariPodiums,
+    leclercPodiums,
+    hamiltonPodiums,
     ferrariPoles,
     leclercPoles,
     hamiltonPoles,
@@ -238,61 +422,118 @@ async function fetchMiniStandings(season = "2026") {
     fetchPodiumsForConstructor(season, "ferrari"),
     fetchPodiumsForDriver(season, "leclerc"),
     fetchPodiumsForDriver(season, "hamilton"),
+
     fetchGpPolesForConstructor(season, "ferrari"),
     fetchGpPolesForDriver(season, "leclerc"),
     fetchGpPolesForDriver(season, "hamilton"),
   ]);
 
-  const pickConstructor = (x, pod, poles) =>
-    x
+  /* -------------------------
+     Format response
+     ------------------------- */
+
+  const pickConstructor = (standing, podiums, poles) =>
+    standing
       ? {
           kind: "constructor",
-          id: x.Constructor.constructorId,
-          name: x.Constructor.name,
-          position: Number(x.position),
-          points: Number(x.points),
-          wins: Number(x.wins),
-          podiums: pod.podiums,
+          id: standing.Constructor.constructorId,
+          name: standing.Constructor.name,
+          position: Number(standing.position),
+          points: Number(standing.points),
+          wins: Number(standing.wins),
+          podiums: podiums.podiums,
           poles: poles.poles,
         }
       : null;
 
-  const pickDriver = (x, pod, poles) =>
-    x
+  const pickDriver = (standing, podiums, poles) =>
+    standing
       ? {
           kind: "driver",
-          id: x.Driver.driverId,
-          name: `${x.Driver.givenName} ${x.Driver.familyName}`,
-          position: Number(x.position),
-          points: Number(x.points),
-          wins: Number(x.wins),
-          podiums: pod.podiums,
+          id: standing.Driver.driverId,
+          name: `${standing.Driver.givenName} ${standing.Driver.familyName}`,
+          position: Number(standing.position),
+          points: Number(standing.points),
+          wins: Number(standing.wins),
+          podiums: podiums.podiums,
           poles: poles.poles,
-          constructor: x.Constructors?.[0]?.name || null,
+          constructor:
+            standing.Constructors?.[0]?.name ?? null,
         }
       : null;
 
   return {
     season: Number(season),
-    ferrari: pickConstructor(ferrariStanding, ferrariPod, ferrariPoles),
-    leclerc: pickDriver(leclercStanding, leclercPod, leclercPoles),
-    hamilton: pickDriver(hamiltonStanding, hamiltonPod, hamiltonPoles),
+
+    ferrari: pickConstructor(
+      ferrariStanding,
+      ferrariPodiums,
+      ferrariPoles,
+    ),
+
+    leclerc: pickDriver(
+      leclercStanding,
+      leclercPodiums,
+      leclercPoles,
+    ),
+
+    hamilton: pickDriver(
+      hamiltonStanding,
+      hamiltonPodiums,
+      hamiltonPoles,
+    ),
+
     fetchedAt: new Date().toISOString(),
     source: "jolpica-ergast",
+
     notes:
-      "Podiums = race P1–P3. Poles = Grand Prix qualifying P1 (Sprint Shootout excluded).",
+      "Podiums = Grand Prix race finishes P1–P3. Poles = Grand Prix qualifying P1. Sprint results are excluded.",
+
+    // Useful if anything looks wrong again.
+    debug: {
+      podiums: {
+        ferrari: ferrariPodiums,
+        leclerc: leclercPodiums,
+        hamilton: hamiltonPodiums,
+      },
+      poles: {
+        ferrari: ferrariPoles,
+        leclerc: leclercPoles,
+        hamilton: hamiltonPoles,
+      },
+    },
   };
 }
 
-const season = process.env.SEASON || String(new Date().getFullYear());
+/* =========================
+   Run + write JSON
+   ========================= */
+
+const season =
+  process.env.SEASON ||
+  String(new Date().getFullYear());
+
 const payload = await fetchMiniStandings(season);
 
-// write into docs so Pages can serve it
-await mkdir("docs", { recursive: true });
+await mkdir("docs", {
+  recursive: true,
+});
+
 await writeFile(
   path.join("docs", "standings.json"),
   JSON.stringify(payload, null, 2) + "\n",
   "utf8",
 );
 
-console.log("Wrote docs/standings.json");
+console.log(`Wrote docs/standings.json for ${season}`);
+console.log(
+  JSON.stringify(
+    {
+      ferrari: payload.ferrari,
+      leclerc: payload.leclerc,
+      hamilton: payload.hamilton,
+    },
+    null,
+    2,
+  ),
+);
