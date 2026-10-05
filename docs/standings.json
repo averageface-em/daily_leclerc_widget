@@ -5,17 +5,17 @@
     "id": "ferrari",
     "name": "Ferrari",
     "position": 2,
-    "points": 378,
+    "points": 405,
     "wins": 2,
-    "podiums": 9,
+    "podiums": 10,
     "poles": 0
   },
   "leclerc": {
     "kind": "driver",
     "id": "leclerc",
     "name": "Charles Leclerc",
-    "position": 5,
-    "points": 179,
+    "position": 4,
+    "points": 191,
     "wins": 1,
     "podiums": 4,
     "poles": 0,
@@ -26,19 +26,19 @@
     "id": "hamilton",
     "name": "Lewis Hamilton",
     "position": 3,
-    "points": 199,
+    "points": 214,
     "wins": 1,
-    "podiums": 5,
+    "podiums": 6,
     "poles": 0,
     "constructor": "Ferrari"
   },
-  "fetchedAt": "2026-09-28T16:42:56.162Z",
+  "fetchedAt": "2026-10-05T17:04:48.511Z",
   "source": "jolpica-ergast",
   "notes": "Podiums = Grand Prix race finishes P1–P3. Poles = Grand Prix qualifying P1. Sprint results are excluded.",
   "debug": {
     "podiums": {
       "ferrari": {
-        "podiums": 9,
+        "podiums": 10,
         "ok": true,
         "status": 200
       },
@@ -48,7 +48,7 @@
         "status": 200
       },
       "hamilton": {
-        "podiums": 5,
+        "podiums": 6,
         "ok": true,
         "status": 200
       }
