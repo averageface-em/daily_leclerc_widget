@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-05T17:56:54.653Z",
+  "updated_at": "2026-10-12T18:38:11.534Z",
   "season": 2026,
-  "round": 17,
-  "race_name": "Singapore Grand Prix",
-  "circuit_id": "marina_bay",
+  "round": 18,
+  "race_name": "United States Grand Prix",
+  "circuit_id": "americas",
   "location": {
-    "locality": "Marina Bay",
-    "country": "Singapore"
+    "locality": "Austin",
+    "country": "USA"
   },
-  "fp1_utc": "2026-10-09T08:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL18%20-%20Singapore.png"
+  "fp1_utc": "2026-10-23T17:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL19%20-%20COTA.png"
 }
