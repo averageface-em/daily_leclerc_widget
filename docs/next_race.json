@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-19T16:13:04.050Z",
+  "updated_at": "2026-10-26T15:52:18.935Z",
   "season": 2026,
-  "round": 18,
-  "race_name": "United States Grand Prix",
-  "circuit_id": "americas",
+  "round": 19,
+  "race_name": "Mexico City Grand Prix",
+  "circuit_id": "rodriguez",
   "location": {
-    "locality": "Austin",
-    "country": "USA"
+    "locality": "Mexico City",
+    "country": "Mexico"
   },
-  "fp1_utc": "2026-10-23T17:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL19%20-%20COTA.png"
+  "fp1_utc": "2026-10-30T18:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL20%20-%20Mexico%20City.png"
 }
