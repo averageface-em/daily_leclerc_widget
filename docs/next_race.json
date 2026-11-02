@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-26T15:52:18.935Z",
+  "updated_at": "2026-11-02T19:13:08.772Z",
   "season": 2026,
-  "round": 19,
-  "race_name": "Mexico City Grand Prix",
-  "circuit_id": "rodriguez",
+  "round": 20,
+  "race_name": "Brazilian Grand Prix",
+  "circuit_id": "interlagos",
   "location": {
-    "locality": "Mexico City",
-    "country": "Mexico"
+    "locality": "São Paulo",
+    "country": "Brazil"
   },
-  "fp1_utc": "2026-10-30T18:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL20%20-%20Mexico%20City.png"
+  "fp1_utc": "2026-11-06T15:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL21%20-%20Interlagos.png"
 }
