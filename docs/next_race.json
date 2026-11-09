@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-11-02T19:13:08.772Z",
+  "updated_at": "2026-11-09T19:30:28.936Z",
   "season": 2026,
-  "round": 20,
-  "race_name": "Brazilian Grand Prix",
-  "circuit_id": "interlagos",
+  "round": 21,
+  "race_name": "Las Vegas Grand Prix",
+  "circuit_id": "vegas",
   "location": {
-    "locality": "São Paulo",
-    "country": "Brazil"
+    "locality": "Las Vegas",
+    "country": "USA"
   },
-  "fp1_utc": "2026-11-06T15:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL21%20-%20Interlagos.png"
+  "fp1_utc": "2026-11-20T00:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL22%20-%20Las%20Vegas.png"
 }
