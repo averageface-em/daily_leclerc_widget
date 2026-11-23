@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-11-16T19:17:08.235Z",
+  "updated_at": "2026-11-23T20:53:20.358Z",
   "season": 2026,
-  "round": 21,
-  "race_name": "Las Vegas Grand Prix",
-  "circuit_id": "vegas",
+  "round": 22,
+  "race_name": "Qatar Grand Prix",
+  "circuit_id": "losail",
   "location": {
-    "locality": "Las Vegas",
-    "country": "USA"
+    "locality": "Lusail",
+    "country": "Qatar"
   },
-  "fp1_utc": "2026-11-20T00:30:00Z",
-  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL22%20-%20Las%20Vegas.png"
+  "fp1_utc": "2026-11-27T13:30:00Z",
+  "track_image": "https://s3.g.s4.mega.io/icjikbdkdf4it7npqli2ixjyuz4niq2nv4uhg/cl16.loa/%5BWEB%5D%20charlesleclerc.com%20Circuit%20Maps/CL23%20-%20Qatar.png"
 }
